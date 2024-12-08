@@ -6,18 +6,6 @@ package com.mycompany.validar.mail;
 
 /**
  *
- * if (puntoIndex == -1) {
-                for (String tdlValido : TDLValidos) {
-                    if (derechaCorreo.equals(tdlValido)) {
-                        this.validaciones.get(3).estado = true;
-                        return true;
-                    }
-                }
-            } 
-            else if(puntoIndex == 0 || puntoIndex == izquierdaCorreo.length() - 1){
-                return false;
-            }
- *
  * @author camil
  */
 
@@ -81,9 +69,18 @@ public class correo {
         if(arroba() == true){
             int puntoIndexDos = derechaCorreo.indexOf('.');
 
-            if (puntoIndexDos == -1 || puntoIndexDos == 0 || puntoIndexDos == derechaCorreo.length() - 1) {
+            if (puntoIndexDos == -1) {
+                for (String dominioValido : dominiosValidos) {
+                    if (derechaCorreo.equals(dominioValido)) {
+                        this.validaciones.get(2).estado = true;
+                        return true;
+                    }
+                }
+            } 
+            else if(puntoIndexDos == 0 || puntoIndexDos == izquierdaCorreo.length() - 1){
                 return false;
-            } else {
+            }
+            else {
                 String primeraPalabra = derechaCorreo.substring(0, puntoIndexDos);
     
                 for (String dominioValido : dominiosValidos) {
