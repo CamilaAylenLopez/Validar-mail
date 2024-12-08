@@ -27,6 +27,7 @@ public class ValidarMail {
         mailCorreo.arroba();
         mailCorreo.dominios();
         mailCorreo.puntos();
+        mailCorreo.TDL();
 
         System.out.println("Resultados de las validaciones del mail "+ mailCorreo.correoEscrito() + " son:");
         

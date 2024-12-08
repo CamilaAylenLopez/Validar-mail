@@ -6,6 +6,17 @@ package com.mycompany.validar.mail;
 
 /**
  *
+ * if (puntoIndex == -1) {
+                for (String tdlValido : TDLValidos) {
+                    if (derechaCorreo.equals(tdlValido)) {
+                        this.validaciones.get(3).estado = true;
+                        return true;
+                    }
+                }
+            } 
+            else if(puntoIndex == 0 || puntoIndex == izquierdaCorreo.length() - 1){
+                return false;
+            }
  *
  * @author camil
  */
@@ -19,13 +30,16 @@ public class correo {
     private String izquierdaCorreo;
     private List<validaciones> validaciones = new ArrayList<>();
     private String[] dominiosValidos;
+    private String[] TDLValidos;
 
     public correo(String correo) {
         this.correo = correo;
         this.validaciones.add(new validaciones("arroba", false));
         this.validaciones.add(new validaciones("puntos", false));
         this.validaciones.add(new validaciones("dominio", false));
-        this.dominiosValidos = new String[] { "palcam.cat", "palcam.es", "palcam.org", "fppro.com", "fppro.es" };
+        this.validaciones.add(new validaciones("tld", false));
+        this.dominiosValidos = new String[] { "palcam", "fppro" };
+        this.TDLValidos = new String[] { "es", "org", "com", "cat"};
     }
 
     public boolean arroba(){
@@ -65,10 +79,38 @@ public class correo {
 
     public boolean dominios(){
         if(arroba() == true){
-            for (String dominioValido : dominiosValidos) {
-                if (derechaCorreo.equals(dominioValido)) {
-                    this.validaciones.get(2).estado = true;
-                    return true;
+            int puntoIndexDos = derechaCorreo.indexOf('.');
+
+            if (puntoIndexDos == -1 || puntoIndexDos == 0 || puntoIndexDos == derechaCorreo.length() - 1) {
+                return false;
+            } else {
+                String primeraPalabra = derechaCorreo.substring(0, puntoIndexDos);
+    
+                for (String dominioValido : dominiosValidos) {
+                    if (primeraPalabra.equals(dominioValido)) {
+                        this.validaciones.get(2).estado = true;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean TDL(){
+        if(arroba() == true){
+            int puntoIndexTres = derechaCorreo.indexOf('.');
+
+            if (puntoIndexTres == -1 || puntoIndexTres == 0 || puntoIndexTres == derechaCorreo.length() - 1) {
+                return false;
+            } else {
+                String segundaPalabra = derechaCorreo.substring(puntoIndexTres + 1);
+    
+                for (String tdlValido : TDLValidos) {
+                    if (segundaPalabra.equals(tdlValido)) {
+                        this.validaciones.get(3).estado = true;
+                        return true;
+                    }
                 }
             }
         }
