@@ -47,7 +47,7 @@ public class correo { //esta clase es muy extensa no se si no la debería dividi
     }
 
     public boolean puntos(){
-        if (!arroba()) return false;
+        if (!arrobaValidada) return false;
         
         int puntoIndex = izquierdaCorreo.indexOf('.');
         if (puntoIndex == -1 || puntoIndex == 0 || puntoIndex == izquierdaCorreo.length() - 1) {
@@ -66,10 +66,10 @@ public class correo { //esta clase es muy extensa no se si no la debería dividi
     }
 
     public boolean dominios(){
-        if (!arroba()) return false;
+        if (!arrobaValidada) return false;
         
         int puntoIndexDos = derechaCorreo.indexOf('.');
-        if (puntoIndexDos == 0 || puntoIndexDos == izquierdaCorreo.length() - 1) return false;
+        if (puntoIndexDos == 0 || puntoIndexDos == derechaCorreo.length() - 1) return false;
         else if(puntoIndexDos == -1){
             for (String dominioValido : dominiosValidos) {
                 if (derechaCorreo.equals(dominioValido)) {
@@ -91,7 +91,7 @@ public class correo { //esta clase es muy extensa no se si no la debería dividi
     }
 
     public boolean TDL(){
-        if (!arroba()) return false;
+        if (!arrobaValidada) return false;
         
         int puntoIndexTres = derechaCorreo.indexOf('.');
         if (puntoIndexTres == -1 || puntoIndexTres == 0 || puntoIndexTres == derechaCorreo.length() - 1) {
