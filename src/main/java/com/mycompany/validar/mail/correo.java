@@ -12,13 +12,14 @@ package com.mycompany.validar.mail;
 import java.util.ArrayList;
 import java.util.List;
 
-public class correo {
+public class correo { //esta clase es muy extensa no se si no la debería dividir
     private String correo;
     private String derechaCorreo;
     private String izquierdaCorreo;
     private List<validaciones> validaciones = new ArrayList<>();
     private String[] dominiosValidos;
     private String[] TDLValidos;
+    private boolean arrobaValidada = false;
 
     public correo(String correo) {
         this.correo = correo;
@@ -40,54 +41,49 @@ public class correo {
         }
         this.derechaCorreo = correo.substring(arrobas + 1);
         this.izquierdaCorreo = correo.substring(0, arrobas);
-        this.validaciones.get(0).estado = true;
+        this.validaciones.get(0).setEstado(true);
+        arrobaValidada = true;
         return true;
     }
 
     public boolean puntos(){
-        if(arroba() == true){
-            int puntoIndex = izquierdaCorreo.indexOf('.');
+        if (!arroba()) return false;
+        
+        int puntoIndex = izquierdaCorreo.indexOf('.');
+        if (puntoIndex == -1 || puntoIndex == 0 || puntoIndex == izquierdaCorreo.length() - 1) {
+            return false;
+        } else {
+            String palabra1 = izquierdaCorreo.substring(0, puntoIndex);
+            String palabra2 = izquierdaCorreo.substring(puntoIndex + 1);
 
-            if (puntoIndex == -1 || puntoIndex == 0 || puntoIndex == izquierdaCorreo.length() - 1) {
-                return false;
+            if (esPalabraValida(palabra1) && esPalabraValida(palabra2)) {
+                this.validaciones.get(1).setEstado(true);
+                return true;
             } else {
-                String palabra1 = izquierdaCorreo.substring(0, puntoIndex);
-                String palabra2 = izquierdaCorreo.substring(puntoIndex + 1);
-    
-                if (esPalabraValida(palabra1) && esPalabraValida(palabra2)) {
-                    this.validaciones.get(1).estado = true;
-                    return true;
-                } else {
-                    return false;
-                }
+                return false;
             }
         }
-        return false;
     }
 
     public boolean dominios(){
-        if(arroba() == true){
-            int puntoIndexDos = derechaCorreo.indexOf('.');
-
-            if (puntoIndexDos == -1) {
-                for (String dominioValido : dominiosValidos) {
-                    if (derechaCorreo.equals(dominioValido)) {
-                        this.validaciones.get(2).estado = true;
-                        return true;
-                    }
+        if (!arroba()) return false;
+        
+        int puntoIndexDos = derechaCorreo.indexOf('.');
+        if (puntoIndexDos == 0 || puntoIndexDos == izquierdaCorreo.length() - 1) return false;
+        else if(puntoIndexDos == -1){
+            for (String dominioValido : dominiosValidos) {
+                if (derechaCorreo.equals(dominioValido)) {
+                    this.validaciones.get(2).setEstado(true);
+                    return true;
                 }
-            } 
-            else if(puntoIndexDos == 0 || puntoIndexDos == izquierdaCorreo.length() - 1){
-                return false;
             }
-            else {
-                String primeraPalabra = derechaCorreo.substring(0, puntoIndexDos);
-    
-                for (String dominioValido : dominiosValidos) {
-                    if (primeraPalabra.equals(dominioValido)) {
-                        this.validaciones.get(2).estado = true;
-                        return true;
-                    }
+        }
+        else {
+            String primeraPalabra = derechaCorreo.substring(0, puntoIndexDos);
+            for (String dominioValido : dominiosValidos) {
+                if (primeraPalabra.equals(dominioValido)) {
+                    this.validaciones.get(2).setEstado(true);
+                    return true;
                 }
             }
         }
@@ -95,19 +91,17 @@ public class correo {
     }
 
     public boolean TDL(){
-        if(arroba() == true){
-            int puntoIndexTres = derechaCorreo.indexOf('.');
-
-            if (puntoIndexTres == -1 || puntoIndexTres == 0 || puntoIndexTres == derechaCorreo.length() - 1) {
-                return false;
-            } else {
-                String segundaPalabra = derechaCorreo.substring(puntoIndexTres + 1);
-    
-                for (String tdlValido : TDLValidos) {
-                    if (segundaPalabra.equals(tdlValido)) {
-                        this.validaciones.get(3).estado = true;
-                        return true;
-                    }
+        if (!arroba()) return false;
+        
+        int puntoIndexTres = derechaCorreo.indexOf('.');
+        if (puntoIndexTres == -1 || puntoIndexTres == 0 || puntoIndexTres == derechaCorreo.length() - 1) {
+            return false;
+        } else {
+            String segundaPalabra = derechaCorreo.substring(puntoIndexTres + 1);
+            for (String tdlValido : TDLValidos) {
+                if (segundaPalabra.equals(tdlValido)) {
+                    this.validaciones.get(3).setEstado(true);
+                    return true;
                 }
             }
         }
@@ -123,12 +117,17 @@ public class correo {
         }
         return true;
     }
+    /* en internet encontre esta otra forma de hacerlo
+    private boolean esPalabraValida(String palabra) {
+    return palabra.matches("[a-zA-Z]+");
+    }
+     */
 
     public String correoEscrito(){
         return this.correo;
     }
 
-    public List verValidaciones(){
-        return validaciones;
-    }
+    public List<validaciones> verValidaciones() {
+        return new ArrayList<>(validaciones);
+    }    
 }

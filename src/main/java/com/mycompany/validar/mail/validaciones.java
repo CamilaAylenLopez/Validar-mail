@@ -2,7 +2,7 @@ package com.mycompany.validar.mail;
 
 public class validaciones {
     private String nombre;
-    public boolean estado;
+    private boolean estado;
 
     public validaciones(String nombre, boolean estado) {
         this.nombre = nombre;
@@ -14,4 +14,7 @@ public class validaciones {
     public boolean estadoValidaciones(){
         return estado;
     }
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }    
 }

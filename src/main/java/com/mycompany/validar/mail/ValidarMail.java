@@ -34,8 +34,9 @@ public class ValidarMail {
         List<validaciones> nose = new ArrayList<>();
         nose.addAll(mailCorreo.verValidaciones());
 
-        for (validaciones validacion : nose) {
-            System.out.println(validacion.nombreValidaciones() + ": " + (validacion.estado ? "Cumplida" : "No cumplida"));
+        for (validaciones validacion : mailCorreo.verValidaciones()) {
+            System.out.println(validacion.nombreValidaciones() + ": " + (validacion.estadoValidaciones() ? "Cumplida" : "No cumplida"));
         }
+        
     }
 }
